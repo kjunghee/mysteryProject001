@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kjunghee.test.db.dao.TbUserDAO">
+	<select id="listSelect"
+		resultType="com.kjunghee.test.db.dto.TbUserDTO">
+			<!--전체검색-->
+			SELECT s.index_id, s.name, c1.codeName AS 'department', c2.codeName AS 'position', c3.codeName AS 'gender', s.hireDate, s.phoneNumber
+			FROM tb_staff AS s
+			JOIN tb_codeMaster AS c1
+			ON c1.codeKey = '001' AND c1.codeType = s.department
+			JOIN tb_codeMaster AS c2
+			ON c2.codeKey = '002' AND c2.codeType = s.position
+			JOIN tb_codeMaster AS c3
+			ON c3.codeKey = '003' AND c3.codeType = s.gender
+	</select>
+	
+	<select id="listSearch" parameterType="java.lang.String"
+		resultType="com.kjunghee.test.db.dto.TbUserDTO">
+			<!--조건검색 -->
+			SELECT s.index_id, s.name, c1.codeName AS 'department', c2.codeName AS 'position', c3.codeName AS 'gender', s.hireDate, s.phoneNumber, s.department AS 'departmentCode', s.position AS 'positionCode', s.gender AS 'genderCode'
+			FROM tb_staff AS s
+			JOIN tb_codeMaster AS c1
+			ON c1.codeKey = '001' AND c1.codeType = s.department
+			JOIN tb_codeMaster AS c2
+			ON c2.codeKey = '002' AND c2.codeType = s.position
+			JOIN tb_codeMaster AS c3
+			ON c3.codeKey = '003' AND c3.codeType = s.gender
+			WHERE s.name LIKE CONCAT('%',#{nameKeyword},'%')
+			AND s.department
+			IN(SELECT codeType FROM tb_codeMaster WHERE codeKey = '001' AND codeName LIKE CONCAT('%',#{departmentKeyword},'%'));
+	</select>
+
+	<insert id="userInsert"
+		parameterType="com.kjunghee.test.db.dto.TbUserDTO">
+		INSERT INTO tb_staff(name,department,position,gender,hireDate,phoneNumber)
+		VALUES(#{name}, #{department}, #{position}, #{gender}, #{hireDate}, #{phoneNumber})
+	</insert>
+	
+	<delete id="userDelete"
+		parameterType="java.lang.Integer">
+		DELETE FROM tb_staff
+		WHERE index_id = #{selectIndexNo}
+	</delete>
+
+	<update id="userUpdate"
+		parameterType="com.kjunghee.test.db.dto.TbUserDTO">
+		UPDATE tb_staff
+		SET name = #{name}, department = #{department}, position = #{position}, gender = #{gender}, hireDate = #{hireDate}, phoneNumber = #{phoneNumber}
+		WHERE index_id = #{index_id}
+		</update>
+
+</mapper>

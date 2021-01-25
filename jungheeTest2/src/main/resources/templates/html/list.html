@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>社員管理</title>
+<link th:href="@{/css/list.css}" rel="stylesheet" />
+<script th:src="@{/js/jquery-3.5.1.min.js}"></script>
+<script th:src="@{/js/js_list.js}"></script>
+</head>
+<body>
+	<div id="searchTable">
+	<h1 id="titleStaff">社員情報検索画面</h1>
+		<div id="searchDiv" class="search-div">
+			<span class="label">名前：</span>
+				<input type="text" id="searchBarName" class="searchName-bar" />
+			<p>
+			<span class="label">部署：</span>
+				<input type="text" id="searchBarDepartment" class="searchDepartment-bar" />
+			<input type="button" id="searchBtn" class="search-btn btn" value="検索" />
+			<input type="button" id="registerBtn" class="register-btn btn" value="登録" />
+
+		<table id="listTable" border="1">
+			<thead>
+				<tr>
+<!-- 					<th class="list-name"></th> -->
+					<th style="text-align:center" class="list-name">番号</th>
+					<th id="column" class="list-name">名前</th>
+					<th id="column" class="list-name">部署</th>
+					<th id="column" class="list-name">職責</th>
+					<th id="column" class="list-name">性別</th>
+					<th id="column" class="list-name">入社日</th>
+					<th style="text-align:center" class="list-name">電話番号</th>
+					<th id="column" class="list-name">　</th>
+					<th id="column" class="list-name">　</th>
+					
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="obj : ${userList}">	
+					<td class="indexLine" th:text="${obj.index_id}"></td>
+					<td class="noLine" th:text="${obj.name}"></td>
+					<td class="noLine" th:text="${obj.department}"></td>
+					<td class="noLine" th:text="${obj.position}"></td>
+					<td class="noLine" th:text="${obj.gender}"></td>
+					<td class="noLine" th:text="${obj.hireDate}"></td>
+					<td class="PHLine" th:text="${obj.phoneNumber}"></td>
+					<td class="noLine">修正</td>
+<!-- 					<td class="noLine"><button id="deleteBtn" th:value= "${obj.index_id}" class="selectIndexNo">削除</button></td> -->
+					<td><input type="button" name="index_id"
+						th:value="${obj.index_id}" class="selectIndexNo"></td>
+				</tr>
+			</tbody>
+		</table>
+<!-- 		<button id="deleteBtn" class="btn">削除</button> -->
+<!-- 		<button id="updateBtn" class="btn">修正</button> -->
+	</div>
+
+	<div id="userModel" class="user-model" style="display: none;">
+
+		<div class="close-bar">
+			<span class="close">X</span>
+		</div>
+		<div id="registerForm" class="register-form">
+			<span class="label">名前　　</span>
+			<input type="text" id="nameText"　maxlength="30" class="name-text register-text" />
+			<br /> <br />
+			<span class="label">部署　　</span>
+<!-- 			<input type="text" id="departmentText" class="department-text register-text" /> -->
+			<select id="departmentText" class="department-text">
+				<option value="000" selected>部署名</option>
+				<option value="001">総務部</option>
+				<option value="002">経理部</option>
+				<option value="003">営業部</option>
+				<option value="004">技術部</option>
+			</select>
+			<br /> <br /> 
+			<span class="label">職責　　</span>
+			<select name="positionText" class="position-text" >
+				<option value="000" selected>職責名</option>
+				<option value="001">社員</option>
+				<option value="002">部長</option>
+				<option value="003">社長</option>
+			</select>
+			<br /> <br /> 
+			<span class="label">性別　　</span>
+			<input type="radio" id="man-check" class="gender-radio" name="gender" value="001" checked="checked" />
+			<label for="man-check" class="radio-label">男性</label>
+			<input type="radio" id="woman-check" class="gender-radio" name="gender" value="002" />
+			<label for="woman-check" class="radio-label">女性</label>
+			<br /> <br />
+			<span class="label">入社日　</span>
+			<input type="date" id="hireDateText" required>
+			<br /> <br />
+			<span class="label">電話番号</span>
+			<input type="text" id="phoneNumberText" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" placeholder="例:080-0000-0000" maxlength="13" class="phoneNumber-text register-text" />
+			<div class="btn-area">
+				<input type="button" id="userRegister" class="user-register" value="登録" />
+			</div>
+		</div>
+	</div>
+	<div class="curtain"></div>
+	
+		<div id="userUpdateModal" class="user-model" style="display: none;">
+
+		<div class="close-bar">
+			<span class="close">X</span>
+		</div>
+		
+		<div id="UpdateForm" class="register-form">
+			<input type="hidden" id="indexUp" value="">
+			<span class="label">名前　　</span>
+			<input type="text" id="nameTextUp" class="name-text register-text" />
+			<br /> <br />
+			<span class="label">部署　　</span>
+<!-- 			<input type="text" id="departmentText" class="department-text register-text" /> -->
+			<select id="departmentTextUp" class="department-text">
+				<option value="000">部署名</option>
+				<option value="001">総務部</option>
+				<option value="002">経理部</option>
+				<option value="003">営業部</option>
+				<option value="004">技術部</option>
+			</select>
+			<br /> <br /> 
+			<span class="label">職責　　</span>
+			<select id="positionTextUp" class="position-text" >
+				<option value="000">職責名</option>
+				<option value="001">社員</option>
+				<option value="002">部長</option>
+				<option value="003">社長</option>
+			</select>
+			<br /> <br /> 
+			<span class="label">性別　　</span>
+			<input type="radio" id="man-checkUp" class="gender-radio" name="genderUp" value="001" />
+			<label for="man-checkUp" class="radio-label">男性</label>
+			<input type="radio" id="woman-checkUp" class="gender-radio" name="genderUp" value="002" />
+			<label for="woman-checkUp" class="radio-label">女性</label>
+			<br /> <br />
+			<span class="label">入社日　</span>
+			<input type="date" id="hireDateTextUp" required>
+			<br /> <br />
+			<span class="label">電話番号</span>
+			<input type="text" id="phoneNumberTextUp" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" placeholder="例:080-0000-0000" maxlength="13"  class="phoneNumber-text register-text" />
+			<div class="btn-area">
+				<input type="button" id="updateBtn" class="updateStart" value="修正" />
+			</div>
+		</div>
+	</div>
+	<div class="curtain"></div>
+
+</body>
+</html>
